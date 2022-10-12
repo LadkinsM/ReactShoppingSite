@@ -1,11 +1,26 @@
 function App() {
   const [melons, setMelons] = React.useState({});
+  const [shoppingCart, setShoppingCart] = React.useState({});
 
   React.useEffect(() => {
     fetch('/api/melons')
       .then((response) => response.json() )
       .then((melonData) => setMelons(melonData));
   }, []);
+
+  function addMelonToCart(melonCode) {
+    setShoppingCart((currentShoppingCart) => {
+      const newShoppingCart = Object.assign({}, currentShoppingCart);
+      
+      if (newShoppingCart[melonCode]){
+        newShoppingCart[melonCode] += 1;
+      } else {
+        newShoppingCart[melonCode] = 1;
+      }
+
+      return newShoppingCart;
+    })
+  }
 
   return (
     <ReactRouterDOM.BrowserRouter>
@@ -23,7 +38,8 @@ function App() {
       </div>
     </ReactRouterDOM.BrowserRouter>
   );
-
 }
+
+
 
 ReactDOM.render(<App />, document.querySelector('#root'));
